@@ -3,9 +3,9 @@
 # This script first uses Snowboy to wake up, then collects audio and sends to
 # Google Speech API for further recognition. It works with both personal and
 # universal models. By default, it uses the Snowboy universal model at
-# resources/snowboy.umdl, you can change it to other universal models, or your
-# own personal models. You also have to provide your Google API key in order to
-# use it.
+# resources/models/snowboy.umdl, you can change it to other universal models, or
+# your own personal models. You also have to provide your Google API key in
+# order to use it.
 
 use Snowboy;
 
@@ -23,16 +23,16 @@ my $Usage = <<EOU;
 This script first uses Snowboy to wake up, then collects audio and sends to
 Google Speech API for further recognition. It works with both personal and
 universal models. By default, it uses the Snowboy universal model at
-resources/snowboy.umdl, you can change it to other universal models, or your own
-personal models. You also have to provide your Google API key in order to use
-it.
+resources/models/snowboy.umdl, you can change it to other universal models, or
+your own personal models. You also have to provide your Google API key in order
+to use it.
 
 Note: Google is now moving to Google Cloud Speech API, so we will have to update
       the API query later.
 
 Usage: ./snowboy_googlevoice.pl <Google_API_Key> [Hotword_Model]
  e.g.: ./snowboy_googlevoice.pl \
-           abcdefghijklmnopqrstuvwxyzABC0123456789 resources/snowboy.umdl
+           abcdefghijklmnopqrstuvwxyzABC0123456789 resources/models/snowboy.umdl
 
 Allowed options:
   --language    : Language for speech recognizer.   (string, default="en")
@@ -48,9 +48,9 @@ if (@ARGV < 1 || @ARGV > 2) {
 
 # Gets parameters.
 my $api_key = shift @ARGV;
-my $model = shift @ARGV || 'resources/snowboy.umdl';
+my $model = shift @ARGV || 'resources/models/snowboy.umdl';
 
-if ($model eq 'resources/snowboy.umdl') {
+if ($model eq 'resources/models/snowboy.umdl') {
   $hotword = "Snowboy";
 } else {
   $hotword = "your hotword";
@@ -133,6 +133,7 @@ print "Done (Silence Threshold: $maxdev, DC Offset: $dcoffset)\n";
 $sb = new Snowboy::SnowboyDetect('resources/common.res', $model);
 $sb->SetSensitivity('0.5');
 $sb->SetAudioGain(1.0);
+$sb->ApplyFrontend(0);
 
 # Running the detection forever.
 print "\n";

@@ -183,18 +183,21 @@ int main(int argc, char* argv[]) {
   // Parameter section.
   // If you have multiple hotword models (e.g., 2), you should set
   // <model_filename> and <sensitivity_str> as follows:
-  //   model_filename = "resources/snowboy.umdl,resources/alexa.pmdl";
-  //   sensitivity_str = "0.4,0.4";
+  //   model_filename =
+  //     "resources/models/snowboy.umdl,resources/models/smart_mirror.umdl";
+  //   sensitivity_str = "0.5,0.5";
   const char resource_filename[] = "resources/common.res";
-  const char model_filename[] = "resources/snowboy.umdl";
+  const char model_filename[] = "resources/models/snowboy.umdl";
   const char sensitivity_str[] = "0.5";
   float audio_gain = 1;
+  bool apply_frontend = false;
 
   // Initializes Snowboy detector.
   SnowboyDetect* detector = SnowboyDetectConstructor(resource_filename,
                                                      model_filename);
   SnowboyDetectSetSensitivity(detector, sensitivity_str);
   SnowboyDetectSetAudioGain(detector, audio_gain);
+  SnowboyDetectApplyFrontend(detector, apply_frontend);
 
   // Initializes PortAudio. You may use other tools to capture the audio.
   StartAudioCapturing(SnowboyDetectSampleRate(detector),
